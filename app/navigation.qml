@@ -42,19 +42,11 @@ ApplicationWindow {
     property real car_moving_distance : (car_driving_speed / 3.6) / (1000/positionTimer_interval) // Metric unit
 
     Plugin {
-            id: mapbox
-            name: "mapbox"
+            id: maplibre
+            name: "maplibre"
             PluginParameter {
-                name: "mapbox.access_token";
-                value: fileOperation.getMapAccessToken()
-            }
-            PluginParameter {
-                name: "mapbox.mapping.additional_map_ids"
-                value: fileOperation.getMapStyleUrls()
-            }
-            PluginParameter {
-                name: "mapbox.mapping.cache.directory"
-                value: fileOperation.getCachePath("mapbox")
+                name: "maplibre.map.styles"
+                value: fileOperation.getMaplibreStyle();
             }
     }
     Plugin {
@@ -113,7 +105,7 @@ ApplicationWindow {
 
         width: parent.width
         height: parent.height
-        plugin: fileOperation.isOSMEnabled() ? osm : mapbox
+        plugin: maplibre
         center: QtPositioning.coordinate(car_position_lat, car_position_lon)
         zoomLevel: default_zoom_level
         bearing: 0
@@ -244,7 +236,7 @@ ApplicationWindow {
                 id: icon_end_point_image
                 width: 32
                 height: 32
-                source: "images/Map_marker_icon_–_Nicolas_Mollet_–_Flag_–_Tourism_–_Classic.png"
+                source: "images/Map_marker_icon_窶点Nicolas_Mollet_窶点Flag_窶点Tourism_窶点Classic.png"
             }
         }
 
@@ -264,7 +256,9 @@ ApplicationWindow {
         RouteModel {
             id: routeModel
             objectName: "routeModel"
-            plugin: map.plugin
+            plugin : Plugin {
+                name: "osm"
+            }
             query:  RouteQuery {
                 id: routeQuery
             }
@@ -758,23 +752,13 @@ ApplicationWindow {
         anchors.leftMargin: 20
 	}
 
-    Image {
-        visible: map.plugin.name === "mapbox"
-        anchors.left: parent.left
-        anchors.leftMargin: 35
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 10
-        scale: 1.5
-        source: "images/mapbox_logo.svg"
-    }
-
     Label {
-        visible: map.plugin.name === "mapbox"
+        visible: map.plugin.name === "maplibre"
         font.pixelSize: 18
         anchors.right: parent.right
         anchors.rightMargin: 25
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 10
-        text: "<a href='https://www.mapbox.com/about/maps'>© Mapbox | </a> <a href='http://www.openstreetmap.org/copyright'>© OpenStreetMap | </a> <a href='https://www.mapbox.com/map-feedback/'><strong>Improve this map</strong>"
-	}
+        text: "MapLibre | © OpenMapTiles © OpenStreetMap contributors"
+    }
 }
