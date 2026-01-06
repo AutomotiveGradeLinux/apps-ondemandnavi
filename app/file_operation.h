@@ -22,6 +22,7 @@ class File_Operation: public QObject{
     double m_start_latitude;
     double m_start_longitude;
     QString m_style;
+    QString m_map_copyright;
     bool m_enable_maplibre;
 
 public:
@@ -34,6 +35,7 @@ public:
     Q_INVOKABLE double getStartLongitude();
     Q_INVOKABLE bool isMaplibre() { return m_enable_maplibre; };
     Q_INVOKABLE QString getMaplibreStyle();
+    Q_INVOKABLE QString getMapCopyright();
     Q_INVOKABLE QString getCachePath(QString name);
 
 private:

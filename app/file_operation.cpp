@@ -16,6 +16,7 @@ void File_Operation::initFileOperation(){
     m_start_latitude = 36.136261; // set default coordinate Westgate
     m_start_longitude = -115.151254;
     m_style = QString("https://tile.openstreetmap.jp/styles/openmaptiles/style.json");
+    m_map_copyright = QString("MapLibre | © OpenMapTiles © OpenStreetMap contributors");
     m_enable_maplibre = true;
 
     QFile file(NAVI_CONFIG_FILEPATH);
@@ -66,7 +67,12 @@ void File_Operation::initFileOperation(){
     }
 
     if(jsonObj.contains("maplibreStyleUrls")){
-        m_style = jsonObj["maplibreStyleUrls"].toString();
+        if(jsonObj.contains("mapCopyright")){
+            m_style = jsonObj["maplibreStyleUrls"].toString();
+            m_map_copyright = jsonObj["mapCopyright"].toString();
+        } else {
+            fprintf(stderr,"Must be set mapCopyright if you set maplibreStyleUrls.\n");
+        }
     }
 
     file.close();
@@ -89,6 +95,10 @@ double File_Operation::getStartLongitude(){
 
 QString File_Operation::getMaplibreStyle() {
     return m_style;
+}
+
+QString File_Operation::getMapCopyright() {
+    return m_map_copyright;
 }
 
 QString File_Operation::getCachePath(QString name)

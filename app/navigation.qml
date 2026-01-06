@@ -759,6 +759,6 @@ ApplicationWindow {
         anchors.rightMargin: 25
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 10
-        text: "MapLibre | © OpenMapTiles © OpenStreetMap contributors"
+        text: fileOperation.getMapCopyright();
     }
 }
